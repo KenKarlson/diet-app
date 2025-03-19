@@ -32,7 +32,7 @@ li {
 }
 
 button {
-  background-color: #dc3545;
+  background-color: #dd5462;
   color: #fff;
   border: none;
   border-radius: 4px;
