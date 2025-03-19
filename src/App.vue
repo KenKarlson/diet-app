@@ -1,67 +1,112 @@
 <template>
-  <div id="app">
-    <div class="container">
-      <div class="app-box">
+  <div class="container">
+    <h1>Составление диеты</h1>
 
+    <!-- Форма для ввода данных -->
+    <form @submit.prevent="addFoodItem">
+      <label for="foodItem">Продукт:</label>
+      <input type="text" id="foodItem" v-model="newFoodItem" placeholder="Введите продукт" required />
 
-        <h1>Составление диеты</h1>
+      <label for="calories">Калории:</label>
+      <input type="number" id="calories" v-model="newCalories" placeholder="Введите калории" required />
 
-        <!-- Форма для ввода данных -->
-        <form @submit.prevent="addFoodItem">
-          <label for="foodItem">Продукт:</label>
-          <input type="text" id="foodItem" v-model="newFoodItem" placeholder="Введите продукт" required>
+      <button type="submit">Добавить в диету</button>
+    </form>
 
-          <label for="calories">Калории:</label>
-          <input type="number" id="calories" v-model="newCalories" placeholder="Введите калории" required>
+    <!-- Список добавленных продуктов -->
+    <h2>Ваша диета:</h2>
+    <ul>
+      <Food-component v-for="(item, index) in dietItems" :key="index" :item="item" @remove="removeFoodItem(index)">
+      </food-component>
+    </ul>
 
-          <button type="submit">Добавить в диету</button>
-        </form>
+    <!-- Общее количество калорий -->
+    <p>Общее количество калорий: <span class="total-calories">{{ totalCalories }}</span></p>
 
-        <!-- Список добавленных продуктов -->
-        <h2>Ваша диета:</h2>
-        <ul>
-          <FoodComponent v-for="(item, index) in dietItems" :key="index" :item="item" @remove="removeFoodItem(index)" />
-        </ul>
-
-        <!-- Общее количество калорий -->
-        <p>Общее количество калорий: <span class="total-calories">{{ totalCalories }}</span></p>
-      </div>
-
-    </div>
+    <!-- Календарь -->
+    <h2>Календарь калорий</h2>
+    <Calendar :events="calendarEvents" @day-click="handleDayClick" />
   </div>
 </template>
 
 <script>
 import FoodComponent from './components/FoodComponent.vue';
+import Calendar from 'vue-calendar-component';
 
 export default {
-  components: { FoodComponent },
+  components: {
+    FoodComponent,
+    Calendar,
+  },
   data() {
     return {
       newFoodItem: '',
       newCalories: 0,
-      dietItems: []
+      dietItems: [],
+      calendarEvents: [], // События для календаря
+      selectedDate: null, // Выбранная дата
     };
   },
   computed: {
     totalCalories() {
       return this.dietItems.reduce((sum, item) => sum + item.calories, 0);
-    }
+    },
   },
   methods: {
     addFoodItem() {
       if (this.newFoodItem.trim() && this.newCalories > 0) {
-        this.dietItems.push({
+        const foodItem = {
           name: this.newFoodItem,
-          calories: parseInt(this.newCalories)
-        });
+          calories: parseInt(this.newCalories),
+          date: this.selectedDate || new Date().toISOString().split('T')[0], // Используем выбранную дату или текущую
+        };
+
+        this.dietItems.push(foodItem);
+
+        // Добавляем событие в календарь
+        this.addCalendarEvent(foodItem);
+
         this.newFoodItem = '';
         this.newCalories = 0;
       }
     },
     removeFoodItem(index) {
       this.dietItems.splice(index, 1);
-    }
-  }
+      this.updateCalendarEvents();
+    },
+    handleDayClick(date) {
+      this.selectedDate = date.toISOString().split('T')[0]; // Устанавливаем выбранную дату
+    },
+    addCalendarEvent(foodItem) {
+      const event = {
+        date: foodItem.date,
+        title: `${foodItem.name}: ${foodItem.calories} ккал`,
+        class: 'calories-event',
+      };
+      this.calendarEvents.push(event);
+    },
+    updateCalendarEvents() {
+      this.calendarEvents = this.dietItems.map((item) => ({
+        date: item.date,
+        title: `${item.name}: ${item.calories} ккал`,
+        class: 'calories-event',
+      }));
+    },
+  },
 };
 </script>
+
+<style scoped>
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.calories-event {
+  background-color: #28a745;
+  color: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+</style>

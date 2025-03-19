@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <li>
-      <span>{{ item.name }}</span>
-      <span>{{ item.calories }} ккал</span>
-      <button @click="removeItem">Удалить</button>
-    </li>
-  </div>
+  <li>
+    <span>{{ item.name }}</span>
+    <span>{{ item.calories }} ккал</span>
+    <button @click="removeItem">Удалить</button>
+  </li>
 </template>
 
 <script>
@@ -13,14 +11,14 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     removeItem() {
       this.$emit('remove');
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -29,10 +27,14 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
 }
 
 button {
-  background-color: #dd5462;
+  background-color: #dc3545;
   color: #fff;
   border: none;
   border-radius: 4px;
