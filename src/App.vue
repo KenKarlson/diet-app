@@ -17,7 +17,7 @@
       <!-- Список добавленных продуктов -->
       <h2>Ваша диета:</h2>
       <ul>
-        <FoodItem v-for="(item, index) in dietItems" :key="index" :item="item" @remove="removeFoodItem(index)" />
+        <FoodComponent v-for="(item, index) in dietItems" :key="index" :item="item" @remove="removeFoodItem(index)" />
       </ul>
 
       <!-- Общее количество калорий -->
@@ -27,11 +27,36 @@
 </template>
 
 <script>
+import FoodComponent from './components/FoodComponent.vue';
 
 export default {
-  name: 'App',
-  components: {}
-}
+  components: { FoodComponent },
+  data() {
+    return {
+      newFoodItem: '',
+      newCalories: 0,
+      dietItems: []
+    };
+  },
+  computed: {
+    totalCalories() {
+      return this.dietItems.reduce((sum, item) => sum + item.calories, 0);
+    }
+  },
+  methods: {
+    addFoodItem() {
+      if (this.newFoodItem.trim() && this.newCalories > 0) {
+        this.dietItems.push({
+          name: this.newFoodItem,
+          calories: parseInt(this.newCalories)
+        });
+        this.newFoodItem = '';
+        this.newCalories = 0;
+      }
+    },
+    removeFoodItem(index) {
+      this.dietItems.splice(index, 1);
+    }
+  }
+};
 </script>
-
-<style></style>
