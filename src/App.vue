@@ -25,7 +25,9 @@
 
     <!-- Календарь -->
     <h2>Календарь калорий</h2>
-    <Calendar :events="calendarEvents" @day-click="handleDayClick" />
+    <div>
+      <Calendar :events="calendarEvents" @day-click="handleDayClick" />
+    </div>
   </div>
 </template>
 
