@@ -15,10 +15,8 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    flex-direction: column;
-    
+    flex-direction: column;    
     background-color: #fff;
-    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
@@ -30,6 +28,7 @@ h1 {
 }
 
 form {
+    width: 260px;
     display: flex;
     flex-direction: column;
 }
@@ -76,7 +75,7 @@ li {
     font-weight: bold;
 }
 
-
+/*Доделать потом*/
 /* Стили для каждого кубика */
 .cube {
     background-color: #333;

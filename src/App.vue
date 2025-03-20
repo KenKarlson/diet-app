@@ -24,6 +24,7 @@
     <p>Общее количество калорий: <span class="total-calories">{{ totalCalories }}</span></p>
 
     <!-- Календарь -->
+    <!--Заменить на диаграмму дат каллорий в разрезе недели-->
     <h2>Календарь калорий</h2>
     <div>
       <Calendar :events="calendarEvents" @day-click="handleDayClick" />
@@ -102,7 +103,6 @@ export default {
 .container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .calories-event {
